@@ -1,0 +1,87 @@
+#!/bin/sh
+#
+# oops		This shell script takes care of starting and stopping
+#		Oops!
+#
+# chkconfig:	345 90 25
+#
+# description:	Oops!
+#
+# pidfile:	/var/run/oops.pid
+# config:	/etc/oops/oops.cfg
+
+
+# Source function library
+. /etc/rc.d/init.d/functions
+
+# Get network config
+. /etc/sysconfig/network
+
+# Get service config
+[ -f /etc/sysconfig/oops ] && . /etc/sysconfig/oops
+
+# Check that networking is up.
+if is_no "${NETWORKING}"; then
+	msg_network_down Oops!
+	exit 1
+fi
+
+# Sanity check
+[ -f /etc/oops/oops.cfg ] || exit 0
+
+# See how we were called.
+case "$1" in
+  start)
+	# Check if the service is already running?
+	if [ ! -f /var/lock/subsys/oops ]; then
+		msg_starting Oops!
+		busy		
+		daemon $SERVICE_RUN_NICE_LEVEL oops -d -c /etc/oops/oops.cfg $OOPS_OPTS
+		RETVAL=$?
+		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/oops
+	else
+		msg_already_running Oops!
+	fi
+	;;
+  stop)
+	# Stop daemons.
+	if [ -f /var/lock/subsys/oops ]; then
+		msg_stopping oops
+		oopsctl shutdown
+		rm -f /var/lock/subsys/oops >/dev/null 2>&1
+	else
+		msg_not_running oops
+		exit 1
+	fi
+	;;
+  restart)
+	$0 stop
+	$0 start
+	;;
+  reload)
+	if [ -f /var/lock/subsys/oops ]; then
+		msg_reloading oops
+		busy
+		oopsctl reconfigure
+		ok
+	else
+		msg_not_running oops
+		exit 1
+	fi
+  	;;
+  status)
+	status oops
+	/usr/sbin/oopsctl chkconfig
+	/usr/sbin/oopsctl stat
+	exit $?
+	;;
+  init)
+	echo "Initializing Oops!"
+	oops -z -c /etc/oops/oops.cfg
+	;;
+  *)
+	msg_usage "$0 {start|stop|status|restart|reload|init}"
+	exit 1
+esac
+
+exit $RETVAL
