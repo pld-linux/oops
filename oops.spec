@@ -127,9 +127,11 @@ else
 fi
 
 if [ "$1" = "1" ]; then
-	%banner %{name} -e <<-EOF
-	Don't forget to initialize oops storages, by running:
-	/etc/rc.d/init.d/oops init
+%banner %{name} -e <<EOF
+Don't forget to initialize oops storages, by running:
+
+/etc/rc.d/init.d/oops init
+
 EOF
 #' vim stupidity.
 fi
