@@ -9,6 +9,7 @@ Release:	0.9
 License:	GPL v2
 Group:		Networking/Daemons
 Source0:	http://zipper.paco.net/~igor/oops/%{name}-%{version}.tar.gz
+# Source0-md5:	bd6f743fb4abc6cf08ae310b1927b211
 Source1:	%{name}.logrotate
 Source2:	%{name}.sysconfig
 Source3:	%{name}.init
