@@ -1,8 +1,10 @@
+# TODO
+# - create separate user for this daemon?
 Summary:	Oops! is an HTTP-1.1/FTP proxy server
 Summary(pl):	Oops! jest serwerem proxy HTTP-1.1/FTP
 Name:		oops
 Version:	1.5.23
-Release:	0.2
+Release:	0.12
 License:	GPL v2
 Group:		Networking/Daemons
 Source0:	http://zipper.paco.net/~igor/oops/%{name}-%{version}.tar.gz
@@ -14,6 +16,7 @@ Patch0:		%{name}-DESTDIR.patch
 Patch1:		%{name}-config.patch
 Patch2:		%{name}-ac.patch
 Patch3:		%{name}-build.patch
+Patch4:		%{name}-socket.patch
 URL:		http://zipper.paco.net/~igor/oops.eng/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -22,6 +25,8 @@ BuildRequires:	pcre-devel
 BuildRequires:	pam-devel
 BuildRequires:	mysql-devel
 BuildRequires:	postgresql-devel
+BuildRequires:	sed >= 4.0
+BuildRequires:	rpmbuild(macros) >= 1.177
 PreReq:		rc-scripts
 Requires(post,preun):	/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -73,6 +78,7 @@ ró¿nice w stosunku do Squida:
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 %build
 cp -f /usr/share/automake/config.sub .
@@ -87,7 +93,6 @@ CFLAGS="-D_XOPEN_SOURCE=600 -D_GNU_SOURCE=1"
 	--with-MYSQL=%{_prefix} \
 	--with-PGSQL=%{_prefix} \
 	--libdir=%{_libdir}/oops \
-	--localstatedir=/var/run/oops \
 	--sysconfdir=%{_sysconfdir}/oops
 
 :> src/rwlock.c
@@ -107,6 +112,9 @@ install %{SOURCE2}	$RPM_BUILD_ROOT/etc/sysconfig/oops
 install %{SOURCE3}	$RPM_BUILD_ROOT/etc/rc.d/init.d/oops
 install doc/*.8		$RPM_BUILD_ROOT%{_mandir}/man8
 
+# SECURITY: disable the password(s) there
+sed -i -e 's,:,:!,;s,^,#,' $RPM_BUILD_ROOT%{_sysconfdir}/oops/passwd
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -116,6 +124,14 @@ if [ -f /var/lock/subsys/oops ]; then
 	/etc/rc.d/init.d/oops restart 1>&2
 else
 	echo "Run \"/etc/rc.d/init.d/oops start\" to start Oops!."
+fi
+
+if [ "$1" = "1" ]; then
+	%banner %{name} -e <<-EOF
+	Don't forget to initialize oops storages, by running:
+	/etc/rc.d/init.d/oops init
+EOF
+#' vim stupidity.
 fi
 
 %preun
@@ -130,7 +146,8 @@ fi
 %defattr(644,root,root,755)
 %doc ChangeLog FAQ INSTALL README SERVICES TODO doc/*.html contrib
 %dir %{_sysconfdir}/oops
-%attr(644,root,daemon) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/oops/*
+%attr(644,root,daemon) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/oops/[^p]*
+%attr(640,root,daemon) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/oops/passwd
 %attr(754,root,root) /etc/rc.d/init.d/oops
 %attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/oops
 %attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/logrotate.d/oops
