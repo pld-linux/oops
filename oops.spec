@@ -2,7 +2,7 @@ Summary:	Oops! is an HTTP-1.1/FTP proxy server
 Summary(pl):	Oops! jest serwerem proxy HTTP-1.1/FTP
 Name:		oops
 Version:	1.5.23
-Release:	0.1
+Release:	0.2
 License:	GPL v2
 Group:		Networking/Daemons
 Source0:	http://zipper.paco.net/~igor/oops/%{name}-%{version}.tar.gz
@@ -13,6 +13,7 @@ Source3:	%{name}.init
 Patch0:		%{name}-DESTDIR.patch
 Patch1:		%{name}-config.patch
 Patch2:		%{name}-ac.patch
+Patch3:		%{name}-build.patch
 URL:		http://zipper.paco.net/~igor/oops.eng/
 BuildRequires:	autoconf
 BuildRequires:	db-devel
@@ -70,27 +71,30 @@ ró¿nice w stosunku do Squida:
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %build
 %{__autoconf}
 %{__autoheader}
-CFLAGS="-D_XOPEN_SOURCE=600"
+CFLAGS="-D_XOPEN_SOURCE=600 -D_GNU_SOURCE=1"
 %configure \
 	--enable-large-files \
 	--enable-oops-user=daemon \
 	--with-regexp=pcre \
-	--with-zlib=%{_prefix} \
-	--with-DB=%{_prefix} \
+	--with-zlib="-lz" \
 	--with-MYSQL=%{_prefix} \
 	--with-PGSQL=%{_prefix} \
 	--libdir=%{_libdir}/oops \
+	--localstatedir=/var/run/oops \
 	--sysconfdir=%{_sysconfdir}/oops
 
-%{__make}
+:> src/rwlock.c
+
+%{__make} -j1
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/etc/{sysconfig,rc.d/init.d,logrotate.d},/var/{log/{archiv/oops,oops},spool/oops}} \
+install -d $RPM_BUILD_ROOT{/etc/{sysconfig,rc.d/init.d,logrotate.d},/var/{run/oops,log/{archiv/oops,oops},spool/oops}} \
 	$RPM_BUILD_ROOT%{_mandir}/man8
 
 %{__make} install \
@@ -131,6 +135,7 @@ fi
 %attr(755,root,root) %{_sbindir}/*
 %dir %{_libdir}/oops
 %attr(755,root,root) %{_libdir}/oops/*
+%dir %attr(770,root,daemon) /var/run/oops
 %dir %attr(755,daemon,daemon) /var/log/oops
 %dir /var/log/archiv/oops
 %dir %attr(755,daemon,daemon) /var/spool/oops
