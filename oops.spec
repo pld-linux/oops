@@ -5,7 +5,7 @@ Summary:	Oops! is an HTTP-1.1/FTP proxy server
 Summary(pl):	Oops! jest serwerem proxy HTTP-1.1/FTP
 Name:		oops
 Version:	1.5.22
-Release:	0.7
+Release:	0.8
 License:	GPL v2
 Group:		Networking/Daemons
 Source0:	http://zipper.paco.net/~igor/oops/%{name}-%{version}.tar.gz
@@ -114,8 +114,7 @@ fi
 %defattr(644,root,root,755)
 %doc ChangeLog FAQ INSTALL README SERVICES TODO doc/*.html contrib/*
 %dir %{_sysconfdir}/oops
-# is write permission to configuration files really needed???
-%attr(644,daemon,daemon) %config(noreplace) %{_sysconfdir}/oops/*
+%attr(644,root,daemon) %config(noreplace) %{_sysconfdir}/oops/*
 %attr(754,root,root) %{_sysconfdir}/rc.d/init.d/oops
 %attr(640,root,root) %config(noreplace) %{_sysconfdir}/sysconfig/oops
 %attr(640,root,root) %config(noreplace) %{_sysconfdir}/logrotate.d/oops
