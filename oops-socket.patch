@@ -1,0 +1,11 @@
+--- oops-1.5.23/src/modules/oopsctl.c~	2001-10-01 12:57:00.000000000 +0200
++++ oops-1.5.23/src/modules/oopsctl.c	2005-01-02 16:19:55.000000000 +0200
+@@ -80,7 +80,7 @@
+     }
+     if ( !path[0] ) {
+ 	strncpy(path, OOPS_LOCALSTATEDIR, sizeof(path)-1);
+-	strncat(path, "/oopsctl", sizeof(path)-strlen(path)-1);
++	strncat(path, "/run/oops/oopsctl", sizeof(path)-strlen(path)-1);
+ 	path[sizeof(path)-1] = 0;
+     }
+     if ( !strcasecmp(*command, "help") ) {
