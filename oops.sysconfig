@@ -1,0 +1,8 @@
+# Oops! startup configuration file
+
+# Try to define nice-level for running oops
+SERVICE_RUN_NICE_LEVEL="+5"
+
+# default oops options
+#OOPS_OPTS=""
+
