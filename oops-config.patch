@@ -60,15 +60,6 @@
  #	size 600m ;
  #}
  
-@@ -563,7 +563,7 @@
- 
- module oopsctl {
- 	# path to oopsctl unix socket
--	socket_path	@OOPS_LOCALSTATEDIR@/oopsctl
-+	socket_path	@OOPS_LOCALSTATEDIR@/tmp/oopsctl
- 	# time to auto-refresh page (seconds)
-         html_refresh    300
- }
 @@ -667,7 +667,7 @@
      #  dbname - filename for index file. Use just filename (no full path)
      ##
