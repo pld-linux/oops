@@ -1,0 +1,169 @@
+--- oops-1.5.23.cvs.orig/configure.in
++++ oops-1.5.23.cvs/configure.in
+@@ -203,7 +203,16 @@
+ AC_DEFINE(HAVE__GMTOFF__) AC_MSG_RESULT(yes)
+ ],[AC_MSG_RESULT(no)])
+ 
+-LD=ld
++AC_MSG_CHECKING(what to use as linker)
++case $CC in
++    gcc*)
++	LD=$CC
++	;;
++    *)
++	LD=ld
++	;;
++esac
++AC_MSG_RESULT($LD)
+ 
+ ##
+ ##
+@@ -248,40 +257,34 @@
+ }
+ EOF
+ 	$CC confmain.c -o confmain $LIBS $DLLIB 2>>config.log
+-	$CC conftest.c -c $CFLAGS -o conftest.o 2>> config.log
+-	$LD conftest.o $LIBDB_PATH -shared -o conftest.so 2>> config.log
++	$CC conftest.c -c $CFLAGS -fPIC -o conftest.o 2>> config.log
++	$LD conftest.o -fPIC -shared -o conftest.so 2>> config.log
+ 	if test -f conftest.so ; then
+ 	    res=`./confmain`
+ 	fi
+ 	if test "$res" = "test"; then
+-	    SOFLAGS="$LIBDB_PATH -shared"
+-	fi
+-	if test "$SOFLAGS" = ""; then
+-	    $LD conftest.o $LIBDB_PATH -G -o conftest.so 2>> config.log
+-	    if test -f conftest.so ; then
+-		res=`./confmain`
+-	    fi
+-	    if test "$res" = "test"; then
+-		SOFLAGS="$LIBDB_PATH -G"
+-	    fi
++	    CFLAGS="$CFLAGS -fPIC"
++	    SOFLAGS="-fPIC -shared"
+ 	fi
++	rm -f conftest.so conftest.o
+ 	if test "$SOFLAGS" = ""; then
+-	    $LD conftest.o -Bshareable -o conftest.so 2>> config.log
++	    $CC conftest.c -c $CFLAGS -o conftest.o 2>> config.log
++	    $LD conftest.o -G -o conftest.so 2>> config.log
+ 	    if test -f conftest.so ; then
+ 		res=`./confmain`
+ 	    fi
+ 	    if test "$res" = "test"; then
+-		SOFLAGS="$LIBDB_PATH -Bshareable"
++		SOFLAGS="-G"
+ 	    fi
+ 	fi
+ 	rm -f conftest.so
+ 	if test "$SOFLAGS" = ""; then
+-	    $LD conftest.o -fpic -shared -o conftest.so 2>> config.log
++	    $LD conftest.o -Bshareable -o conftest.so 2>> config.log
+ 	    if test -f conftest.so ; then
+ 		res=`./confmain`
+ 	    fi
+ 	    if test "$res" = "test"; then
+-		SOFLAGS="$LIBDB_PATH -fpic -shared"
++		SOFLAGS="-Bshareable"
+ 	    fi
+ 	fi
+ 	rm -f conftest.so
+@@ -289,10 +292,9 @@
+ 	    $LD conftest.o -shared -o conftest.so 2>> config.log
+ 	    if test -f conftest.so ; then
+ 		res=`./confmain`
+-		echo $res
+ 	    fi
+ 	    if test "$res" = "test"; then
+-		SOFLAGS="$LIBDB_PATH -shared"
++		SOFLAGS="-shared"
+ 	    fi
+ 	fi
+ 	rm -f conftest* confmain*
+@@ -303,7 +305,6 @@
+ 	fi
+ fi
+ 
+-LDFLAGS="$LDFLAGS $LIBDB_PATH"
+ CXXCOMPFLAGS=-c
+ CXXSOFLAGS=$SOFLAGS
+ 
+@@ -429,6 +430,11 @@
+ 	  ;;
+ esac
+ 
++## if we link with some gcc encapsulae rpath option as linker option
++if test "$LD" = "$CC" ; then
++    RPATH_OPTION="-Wl,$RPATH_OPTION"
++fi
++
+ if test "X$MYSQL_PATH" != "X" ; then
+     LIBS="-L$MYSQL_PATH/lib -lmysqlclient $LIBS"
+     AC_DEFINE(HAVE_MYSQL)
+@@ -454,13 +460,24 @@
+     AC_DEFINE(REGEX_H, <regex.h>)
+     ;;
+   pcre)
+-		if test -r "/usr/lib/libpcreposix.a" -a -r "/usr/lib/libpcre.a"; then
+-			LIBS="$LIBS /usr/lib/libpcreposix.a /usr/lib/libpcre.a"
+-		elif test -r "/usr/local/lib/libpcreposix.a" -a -r "/usr/local/lib/libpcre.a"; then
++    if test "$MODULES" = 1; then
++	if test -r "/usr/lib/libpcreposix.so" -a -r "/usr/lib/libpcre.so"; then
++	    LIBS="$LIBS -lpcreposix -lpcre"
++	elif test -r "/usr/local/lib/libpcreposix.so" -a -r "/usr/local/lib/libpcre.so"; then
++	    LIBS="$LIBS -lpcreposix -lpcre"
++	    if test "X`echo $CFLAGS | grep '\-I/usr/local/include'`" = "X"; then
++		CFLAGS="$CFLAGS -I/usr/local/include"
++	    fi
++	fi
++    else
++	if test -r "/usr/lib/libpcreposix.a" -a -r "/usr/lib/libpcre.a"; then
++	    LIBS="$LIBS /usr/lib/libpcreposix.a /usr/lib/libpcre.a"
++	elif test -r "/usr/local/lib/libpcreposix.a" -a -r "/usr/local/lib/libpcre.a"; then
+ 	    LIBS="$LIBS /usr/local/lib/libpcreposix.a /usr/local/lib/libpcre.a"
+-		fi
+-    if test "X`echo $CFLAGS | grep '\-I/usr/local/include'`" = "X"; then
+-	CFLAGS="$CFLAGS -I/usr/local/include"
++	    if test "X`echo $CFLAGS | grep '\-I/usr/local/include'`" = "X"; then
++		CFLAGS="$CFLAGS -I/usr/local/include"
++	    fi
++	fi
+     fi
+     AC_DEFINE(REGEX_H, <pcreposix.h>)
+     ;;
+@@ -593,19 +610,21 @@
+ 
+ #LIBDB_REAL_PATH=""
+ if test "X$LIBDB_PATH" != "X" ; then
+-    if test "X$LIBDB_LIBRARY_PATH" = "X" ; then
+-	LIBDB_LIBRARY_PATH=$LIBDB_PATH/lib
++    if test "$LIBDB_PATH" != "/usr" ; then
++	if test "X$LIBDB_LIBRARY_PATH" = "X" ; then
++	    LIBDB_LIBRARY_PATH=$LIBDB_PATH/lib
++	fi
++	LIBDB_LINK_FLAGS="-L$LIBDB_LIBRARY_PATH"
++	case $CC in
++	gcc*)
++	    LDFLAGS="$LDFLAGS $RPATH_OPTION $LIBDB_LIBRARY_PATH"
++	    EXTLDFLAGS="-Xlinker $RPATH_OPTION -Xlinker $LIBDB_LIBRARY_PATH"
++	    CXXSOFLAGS="$CXXSOFLAGS -Xlinker $RPATH_OPTION -Xlinker $LIBDB_LIBRARY_PATH"
++	;;
++	*)
++	;;
++	esac
+     fi
+-    LIBDB_LINK_FLAGS="-L$LIBDB_LIBRARY_PATH"
+-    case $CC in
+-    gcc*)
+-	LDFLAGS="$LDFLAGS $RPATH_OPTION $LIBDB_LIBRARY_PATH"
+-	EXTLDFLAGS="-Xlinker $RPATH_OPTION -Xlinker $LIBDB_LIBRARY_PATH"
+-	CXXSOFLAGS="$CXXSOFLAGS -Xlinker $RPATH_OPTION -Xlinker $LIBDB_LIBRARY_PATH"
+-    ;;
+-    *)
+-    ;;
+-    esac
+ fi
+ 
+ CFLAGS="$CFLAGS $LIBDB_INCL"
+
