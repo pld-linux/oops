@@ -1,6 +1,3 @@
-# TODO:
-# - use shared libs instead of static
-
 Summary:	Oops! is an HTTP-1.1/FTP proxy server
 Summary(pl):	Oops! jest serwerem proxy HTTP-1.1/FTP
 Name:		oops
@@ -15,7 +12,6 @@ Source2:	%{name}.sysconfig
 Source3:	%{name}.init
 Patch0:		%{name}-DESTDIR.patch
 Patch1:		%{name}-config.patch
-Patch2:		%{name}-parser_fix.patch
 URL:		http://zipper.paco.net/~igor/oops.eng/
 BuildRequires:	autoconf
 BuildRequires:	db-devel
@@ -69,7 +65,6 @@ ró¿nice w stosunku do Squida:
 %setup -q
 %patch0 -p1
 %patch1 -p1
-#%patch2 -p1
 
 %build
 %{__autoconf}
@@ -92,7 +87,7 @@ install -d $RPM_BUILD_ROOT{/etc/{sysconfig,rc.d/init.d,logrotate.d},/var/{log/{a
 install %{SOURCE1}	$RPM_BUILD_ROOT/etc/logrotate.d/oops
 install %{SOURCE2}	$RPM_BUILD_ROOT/etc/sysconfig/oops
 install %{SOURCE3}	$RPM_BUILD_ROOT/etc/rc.d/init.d/oops
-install doc/*.8		$RPM_BUILD_ROOT%{_mandir}/man8/
+install doc/*.8		$RPM_BUILD_ROOT%{_mandir}/man8
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -117,13 +112,13 @@ fi
 %defattr(644,root,root,755)
 %doc ChangeLog FAQ INSTALL README SERVICES TODO doc/*.html contrib
 %dir %{_sysconfdir}/oops
-%attr(644,root,daemon) %config(noreplace) %{_sysconfdir}/oops/*
+%attr(644,root,daemon) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/oops/*
 %attr(754,root,root) /etc/rc.d/init.d/oops
-%attr(640,root,root) %config(noreplace) /etc/sysconfig/oops
-%attr(640,root,root) %config(noreplace) /etc/logrotate.d/oops
+%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/oops
+%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/logrotate.d/oops
 %attr(755,root,root) %{_sbindir}/*
-%attr(755,root,root) %{_libdir}/oops/*
 %dir %{_libdir}/oops
+%attr(755,root,root) %{_libdir}/oops/*
 %dir %attr(755,daemon,daemon) /var/log/oops
 %dir /var/log/archiv/oops
 %dir %attr(755,daemon,daemon) /var/spool/oops
