@@ -1,0 +1,11 @@
+diff -urN oops-1.5.23.org/src/modules/Makefile.in oops-1.5.23/src/modules/Makefile.in
+--- oops-1.5.23.org/src/modules/Makefile.in	2004-08-12 20:48:05.842373000 +0200
++++ oops-1.5.23/src/modules/Makefile.in	2004-08-12 21:36:52.663428568 +0200
+@@ -1,6 +1,6 @@
+ CC = @CC@
+ CXX = @CXX@
+-LIBS = @LIBS@
++LIBS = -lc @LIBS@
+ CFLAGS = @CFLAGS@ @DEFS@
+ LDFLAGS = @LDFLAGS@
+ LD = @LD@
