@@ -1,0 +1,159 @@
+--- ./src/Makefile.in.org	Mon Oct  8 13:34:09 2001
++++ ./src/Makefile.in	Mon Jul  8 20:05:55 2002
+@@ -2,8 +2,8 @@
+ CXX = @CXX@
+ LDFLAGS = @LDFLAGS@
+ #EXTLDFLAGS = @EXTLDFLAGS@
+-INSTALL = @INSTALL@ @SETOWNER@
+-INSTALL_DATA = @INSTALL@ -m 644 @SETOWNER@
++INSTALL = @INSTALL@ 
++INSTALL_DATA = @INSTALL@ -m 644
+ CHOWN = @CHOWN@
+ STATIC_MODULES = @STATIC_MODULES@
+ LIBGB_PATH = @LIBGB_PATH@
+@@ -46,74 +46,82 @@
+ 	${CC} ${CFLAGS} ${OBJS} ${EXTLDFLAGS} ${LDFLAGS} ${LIBGB_PATH} ${LIBGB_NAME} ${OOPS_LIBS} ${LIBZ_NAME} ${OOPS_RPATH} -o oops
+ 
+ mkinstalldirs:
+-	../mkinstalldirs ${OOPSPATH} \
+-			 ${OOPSPATH}/logs \
+-			 ${OOPSPATH}/DB \
+-			 ${OOPSPATH}/storages \
+-			 ${OOPS_SYSCONFDIR}/tables \
+-			 ${OOPS_LIBDIR}
++	../mkinstalldirs \
++			$(DESTDIR)${OOPSPATH} \
++			$(DESTDIR)${OOPS_SBINDIR} \
++			$(DESTDIR)${OOPSPATH}/logs \
++			$(DESTDIR)${OOPSPATH}/DB \
++			$(DESTDIR)${OOPSPATH}/storages \
++			$(DESTDIR)${OOPS_SYSCONFDIR}/tables \
++			$(DESTDIR)${OOPS_LIBDIR} \
++			$(DESTDIR)$(mandir)/man8
+ 
+ 	if [ "X@OOPS_USER@" != "X" ]; then\
+-		${CHOWN} @OOPS_USER@ ${OOPSPATH}/logs;\
+-		${CHOWN} @OOPS_USER@ ${OOPSPATH}/DB;\
++		${CHOWN} @OOPS_USER@ $(DESTDIR)${OOPSPATH}/logs || true;\
++		${CHOWN} @OOPS_USER@ $(DESTDIR)${OOPSPATH}/DB || true;\
+ 	fi
+ 
+ install: all mkinstalldirs
+-	$(INSTALL) oops ${OOPS_SBINDIR}
+-	if [ -f ${OOPS_SYSCONFDIR}/oops.cfg ]; then\
+-		$(INSTALL_DATA) oops.cfg ${OOPS_SYSCONFDIR}/oops.cfg.sample ;\
++	$(INSTALL) oops $(DESTDIR)${OOPS_SBINDIR}
++	${CHOWN} @OOPS_USER@ $(DESTDIR)${OOPS_SBINDIR}/oops || true
++	if [ -f $(DESTDIR)${OOPS_SYSCONFDIR}/oops.cfg ]; then\
++		$(INSTALL_DATA) oops.cfg $(DESTDIR)${OOPS_SYSCONFDIR}/oops.cfg.sample ;\
+ 	   else\
+-		$(INSTALL_DATA) oops.cfg ${OOPS_SYSCONFDIR}/oops.cfg ;\
++		$(INSTALL_DATA) oops.cfg $(DESTDIR)${OOPS_SYSCONFDIR}/oops.cfg ;\
+ 	fi
+-	if [ -f ${OOPS_SYSCONFDIR}/err_template.html ]; then\
+-		$(INSTALL_DATA) err_template.html ${OOPS_SYSCONFDIR}/err_template.html.sample ;\
++	if [ -f $(DESTDIR)${OOPS_SYSCONFDIR}/err_template.html ]; then\
++		$(INSTALL_DATA) err_template.html $(DESTDIR)${OOPS_SYSCONFDIR}/err_template.html.sample ;\
+ 	   else\
+-		$(INSTALL_DATA) err_template.html ${OOPS_SYSCONFDIR}/err_template.html ;\
++		$(INSTALL_DATA) err_template.html $(DESTDIR)${OOPS_SYSCONFDIR}/err_template.html ;\
+ 	fi
+-	if [ -f ${OOPS_SYSCONFDIR}/auth_template.html ]; then\
+-		$(INSTALL_DATA) auth_template.html ${OOPS_SYSCONFDIR}/auth_template.html.sample ;\
++	if [ -f $(DESTDIR)${OOPS_SYSCONFDIR}/auth_template.html ]; then\
++		$(INSTALL_DATA) auth_template.html $(DESTDIR)${OOPS_SYSCONFDIR}/auth_template.html.sample ;\
+ 	   else\
+-		$(INSTALL_DATA) auth_template.html ${OOPS_SYSCONFDIR}/auth_template.html;\
++		$(INSTALL_DATA) auth_template.html $(DESTDIR)${OOPS_SYSCONFDIR}/auth_template.html;\
+ 	fi
+-	if [ -f ${OOPS_SYSCONFDIR}/passwd ]; then\
+-		$(INSTALL_DATA) passwd ${OOPS_SYSCONFDIR}/passwd.sample ;\
++	if [ -f $(DESTDIR)${OOPS_SYSCONFDIR}/passwd ]; then\
++		$(INSTALL_DATA) passwd $(DESTDIR)${OOPS_SYSCONFDIR}/passwd.sample ;\
+ 	   else\
+-		$(INSTALL_DATA) passwd ${OOPS_SYSCONFDIR}/passwd ;\
++		$(INSTALL_DATA) passwd $(DESTDIR)${OOPS_SYSCONFDIR}/passwd ;\
+ 	fi
+-	if [ -f ${OOPS_SYSCONFDIR}/redir_rules ]; then\
+-		$(INSTALL_DATA) redir_rules ${OOPS_SYSCONFDIR}/redir_rules.sample ;\
++	if [ -f $(DESTDIR)${OOPS_SYSCONFDIR}/redir_rules ]; then\
++		$(INSTALL_DATA) redir_rules $(DESTDIR)${OOPS_SYSCONFDIR}/redir_rules.sample ;\
+ 	   else\
+-		$(INSTALL_DATA) redir_rules ${OOPS_SYSCONFDIR}/redir_rules ;\
++		$(INSTALL_DATA) redir_rules $(DESTDIR)${OOPS_SYSCONFDIR}/redir_rules ;\
+ 	fi
+-	if [ -f ${OOPS_SYSCONFDIR}/redir_template.html ]; then\
+-		$(INSTALL_DATA) redir_template.html ${OOPS_SYSCONFDIR}/redir_template.html.sample ;\
++	if [ -f $(DESTDIR)${OOPS_SYSCONFDIR}/redir_template.html ]; then\
++		$(INSTALL_DATA) redir_template.html $(DESTDIR)${OOPS_SYSCONFDIR}/redir_template.html.sample ;\
+ 	   else\
+-		$(INSTALL_DATA) redir_template.html ${OOPS_SYSCONFDIR}/redir_template.html ;\
++		$(INSTALL_DATA) redir_template.html $(DESTDIR)${OOPS_SYSCONFDIR}/redir_template.html ;\
+ 	fi
+-	if [ -f ${OOPS_SYSCONFDIR}/accel_maps ]; then\
+-		$(INSTALL_DATA) accel_maps ${OOPS_SYSCONFDIR}/accel_maps.sample ;\
++	if [ -f $(DESTDIR)${OOPS_SYSCONFDIR}/accel_maps ]; then\
++		$(INSTALL_DATA) accel_maps $(DESTDIR)${OOPS_SYSCONFDIR}/accel_maps.sample ;\
+ 	   else\
+-		$(INSTALL_DATA) accel_maps ${OOPS_SYSCONFDIR}/accel_maps ;\
++		$(INSTALL_DATA) accel_maps $(DESTDIR)${OOPS_SYSCONFDIR}/accel_maps ;\
+ 	fi
+-	if [ -f ${OOPS_SYSCONFDIR}/select.sql ]; then\
+-		$(INSTALL_DATA) select.sql ${OOPS_SYSCONFDIR}/select.sql.sample ;\
++	if [ -f $(DESTDIR)${OOPS_SYSCONFDIR}/select.sql ]; then\
++		$(INSTALL_DATA) select.sql $(DESTDIR)${OOPS_SYSCONFDIR}/select.sql.sample ;\
+ 	   else\
+-		$(INSTALL_DATA) select.sql ${OOPS_SYSCONFDIR}/select.sql ;\
++		$(INSTALL_DATA) select.sql $(DESTDIR)${OOPS_SYSCONFDIR}/select.sql ;\
+ 	fi
+-	if [ -f ${OOPS_SYSCONFDIR}/acl_local_networks ]; then\
+-		$(INSTALL_DATA) acl_local_networks ${OOPS_SYSCONFDIR}/acl_local_networks.sample ;\
++	if [ -f $(DESTDIR)${OOPS_SYSCONFDIR}/acl_local_networks ]; then\
++		$(INSTALL_DATA) acl_local_networks $(DESTDIR)${OOPS_SYSCONFDIR}/acl_local_networks.sample ;\
+ 	   else\
+-		$(INSTALL_DATA) acl_local_networks ${OOPS_SYSCONFDIR}/acl_local_networks ;\
++		$(INSTALL_DATA) acl_local_networks $(DESTDIR)${OOPS_SYSCONFDIR}/acl_local_networks ;\
+ 	fi
+ 	if test "X@SOFLAGS@" != "X"; then \
+ 	for m in modules/*so ; do \
+-		$(INSTALL) $$m ${OOPS_LIBDIR} ; \
++		$(INSTALL) $$m $(DESTDIR)${OOPS_LIBDIR} ; \
++		${CHOWN} @OOPS_USER@ $(DESTDIR)${OOPS_LIBDIR}/$$m || true; \
+ 	done; \
+-	$(INSTALL) modules/oopsctl ${OOPS_SBINDIR}; \
++	$(INSTALL) modules/oopsctl $(DESTDIR)${OOPS_SBINDIR}; \
++	${CHOWN} @OOPS_USER@ $(DESTDIR)${OOPS_SBINDIR}/oopsctl || true; \
+ 	fi
+ 	for t in tables/*.tab ; do \
+-		$(INSTALL_DATA) $$t ${OOPS_SYSCONFDIR}/tables ; \
++		$(INSTALL_DATA) $$t $(DESTDIR)${OOPS_SYSCONFDIR}/tables ; \
+ 	done
++	${CHOWN} @OOPS_USER@ $(DESTDIR)${OOPS_SYSCONFDIR}/tables/*.tab || true;
++	${CHOWN} @OOPS_USER@ $(DESTDIR)${OOPS_SYSCONFDIR}/* || true;
+ 
+ oops.o:		oops.c oops.h version.h environment.h extern.h
+ lib.o:		lib.c oops.h environment.h extern.h
+--- ./configure.in.org	Wed Dec 19 13:18:40 2001
++++ ./configure.in	Mon Jul  8 21:03:04 2002
+@@ -674,7 +674,7 @@
+ OOPS_SBINDIR=$oops_sbindir
+ OOPS_SYSCONFDIR=$oops_sysconfdir
+ OOPS_LOCALSTATEDIR=$oops_localstatedir
+-OOPS_LIBDIR=$oops_libdir
++OOPS_LIBDIR="$oops_libdir"
+ 
+ OOPS_HOME="$oops_prefix/oops"
+ 
+@@ -704,7 +704,11 @@
+ AC_DEFINE_UNQUOTED(OOPS_CFLAGS, "$CFLAGS")
+ AC_DEFINE_UNQUOTED(OOPS_LIBS, "$LIBS")
+ AC_CONFIG_HEADER(src/config.h)
+-AC_OUTPUT(src/Makefile src/modules/Makefile src/oops.cfg doc/oops.8 doc/oopsctl.8)
++AC_OUTPUT([src/Makefile
++	   src/modules/Makefile
++	   src/oops.cfg
++	   doc/oops.8
++	   doc/oopsctl.8])
+ 
+ if test "X$LIBDB_NAME" = "X" ; then
+     if test "X$LIBGB_NAME" = "X" ; then
