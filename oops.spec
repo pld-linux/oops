@@ -16,6 +16,7 @@ Patch2:		%{name}-ac.patch
 Patch3:		%{name}-build.patch
 URL:		http://zipper.paco.net/~igor/oops.eng/
 BuildRequires:	autoconf
+BuildRequires:	automake
 BuildRequires:	db-devel
 BuildRequires:	pcre-devel
 BuildRequires:	pam-devel
@@ -74,6 +75,7 @@ ró¿nice w stosunku do Squida:
 %patch3 -p1
 
 %build
+cp -f /usr/share/automake/config.sub .
 %{__autoconf}
 %{__autoheader}
 CFLAGS="-D_XOPEN_SOURCE=600 -D_GNU_SOURCE=1"
