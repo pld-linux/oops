@@ -1,18 +1,19 @@
---- ./src/Makefile.in.org	Mon Oct  8 13:34:09 2001
-+++ ./src/Makefile.in	Mon Jul  8 20:05:55 2002
+diff -Nru oops-1.5.23.orig/src/Makefile.in oops-1.5.23/src/Makefile.in
+--- oops-1.5.23.orig/src/Makefile.in	2004-06-15 11:02:53.362634800 +0000
++++ oops-1.5.23/src/Makefile.in	2004-06-15 11:04:16.047064856 +0000
 @@ -2,8 +2,8 @@
  CXX = @CXX@
  LDFLAGS = @LDFLAGS@
- #EXTLDFLAGS = @EXTLDFLAGS@
+ EXTLDFLAGS = @EXTLDFLAGS@
 -INSTALL = @INSTALL@ @SETOWNER@
 -INSTALL_DATA = @INSTALL@ -m 644 @SETOWNER@
-+INSTALL = @INSTALL@ 
++INSTALL = @INSTALL@
 +INSTALL_DATA = @INSTALL@ -m 644
  CHOWN = @CHOWN@
  STATIC_MODULES = @STATIC_MODULES@
  LIBGB_PATH = @LIBGB_PATH@
-@@ -46,74 +46,82 @@
- 	${CC} ${CFLAGS} ${OBJS} ${EXTLDFLAGS} ${LDFLAGS} ${LIBGB_PATH} ${LIBGB_NAME} ${OOPS_LIBS} ${LIBZ_NAME} ${OOPS_RPATH} -o oops
+@@ -48,74 +48,74 @@
+ 	${CXX} ${CFLAGS} ${OBJS} ${EXTLDFLAGS} ${LIBGB_PATH} ${LIBGB_NAME} ${OOPS_LIBS} ${LIBZ_NAME} ${OOPS_RPATH} -o oops
  
  mkinstalldirs:
 -	../mkinstalldirs ${OOPSPATH} \
@@ -21,15 +22,12 @@
 -			 ${OOPSPATH}/storages \
 -			 ${OOPS_SYSCONFDIR}/tables \
 -			 ${OOPS_LIBDIR}
-+	../mkinstalldirs \
-+			$(DESTDIR)${OOPSPATH} \
-+			$(DESTDIR)${OOPS_SBINDIR} \
-+			$(DESTDIR)${OOPSPATH}/logs \
-+			$(DESTDIR)${OOPSPATH}/DB \
-+			$(DESTDIR)${OOPSPATH}/storages \
-+			$(DESTDIR)${OOPS_SYSCONFDIR}/tables \
-+			$(DESTDIR)${OOPS_LIBDIR} \
-+			$(DESTDIR)$(mandir)/man8
++	../mkinstalldirs $(DESTDIR)${OOPSPATH} \
++			 $(DESTDIR)${OOPSPATH}/logs \
++			 $(DESTDIR)${OOPSPATH}/DB \
++			 $(DESTDIR)${OOPSPATH}/storages \
++			 $(DESTDIR)${OOPS_SYSCONFDIR}/tables \
++			 $(DESTDIR)${OOPS_LIBDIR}
  
  	if [ "X@OOPS_USER@" != "X" ]; then\
 -		${CHOWN} @OOPS_USER@ ${OOPSPATH}/logs;\
@@ -39,11 +37,12 @@
  	fi
  
  install: all mkinstalldirs
+-	$(INSTALL) -d ${OOPS_SBINDIR}
 -	$(INSTALL) oops ${OOPS_SBINDIR}
 -	if [ -f ${OOPS_SYSCONFDIR}/oops.cfg ]; then\
 -		$(INSTALL_DATA) oops.cfg ${OOPS_SYSCONFDIR}/oops.cfg.sample ;\
++	$(INSTALL) -d $(DESTDIR)${OOPS_SBINDIR}
 +	$(INSTALL) oops $(DESTDIR)${OOPS_SBINDIR}
-+	${CHOWN} @OOPS_USER@ $(DESTDIR)${OOPS_SBINDIR}/oops || true
 +	if [ -f $(DESTDIR)${OOPS_SYSCONFDIR}/oops.cfg ]; then\
 +		$(INSTALL_DATA) oops.cfg $(DESTDIR)${OOPS_SYSCONFDIR}/oops.cfg.sample ;\
  	   else\
@@ -118,42 +117,13 @@
  	for m in modules/*so ; do \
 -		$(INSTALL) $$m ${OOPS_LIBDIR} ; \
 +		$(INSTALL) $$m $(DESTDIR)${OOPS_LIBDIR} ; \
-+		${CHOWN} @OOPS_USER@ $(DESTDIR)${OOPS_LIBDIR}/$$m || true; \
  	done; \
 -	$(INSTALL) modules/oopsctl ${OOPS_SBINDIR}; \
 +	$(INSTALL) modules/oopsctl $(DESTDIR)${OOPS_SBINDIR}; \
-+	${CHOWN} @OOPS_USER@ $(DESTDIR)${OOPS_SBINDIR}/oopsctl || true; \
  	fi
  	for t in tables/*.tab ; do \
 -		$(INSTALL_DATA) $$t ${OOPS_SYSCONFDIR}/tables ; \
 +		$(INSTALL_DATA) $$t $(DESTDIR)${OOPS_SYSCONFDIR}/tables ; \
  	done
-+	${CHOWN} @OOPS_USER@ $(DESTDIR)${OOPS_SYSCONFDIR}/tables/*.tab || true;
-+	${CHOWN} @OOPS_USER@ $(DESTDIR)${OOPS_SYSCONFDIR}/* || true;
  
  oops.o:		oops.c oops.h version.h environment.h extern.h
- lib.o:		lib.c oops.h environment.h extern.h
---- ./configure.in.org	Wed Dec 19 13:18:40 2001
-+++ ./configure.in	Mon Jul  8 21:03:04 2002
-@@ -674,7 +674,7 @@
- OOPS_SBINDIR=$oops_sbindir
- OOPS_SYSCONFDIR=$oops_sysconfdir
- OOPS_LOCALSTATEDIR=$oops_localstatedir
--OOPS_LIBDIR=$oops_libdir
-+OOPS_LIBDIR="$oops_libdir"
- 
- OOPS_HOME="$oops_prefix/oops"
- 
-@@ -704,7 +704,11 @@
- AC_DEFINE_UNQUOTED(OOPS_CFLAGS, "$CFLAGS")
- AC_DEFINE_UNQUOTED(OOPS_LIBS, "$LIBS")
- AC_CONFIG_HEADER(src/config.h)
--AC_OUTPUT(src/Makefile src/modules/Makefile src/oops.cfg doc/oops.8 doc/oopsctl.8)
-+AC_OUTPUT([src/Makefile
-+	   src/modules/Makefile
-+	   src/oops.cfg
-+	   doc/oops.8
-+	   doc/oopsctl.8])
- 
- if test "X$LIBDB_NAME" = "X" ; then
-     if test "X$LIBGB_NAME" = "X" ; then

@@ -4,12 +4,12 @@
 Summary:	Oops! is an HTTP-1.1/FTP proxy server
 Summary(pl):	Oops! jest serwerem proxy HTTP-1.1/FTP
 Name:		oops
-Version:	1.5.22
-Release:	0.9
+Version:	1.5.23
+Release:	0.1
 License:	GPL v2
 Group:		Networking/Daemons
 Source0:	http://zipper.paco.net/~igor/oops/%{name}-%{version}.tar.gz
-# Source0-md5:	bd6f743fb4abc6cf08ae310b1927b211
+# Source0-md5:	bfa19752af517bb5a6cd746acf61064c
 Source1:	%{name}.logrotate
 Source2:	%{name}.sysconfig
 Source3:	%{name}.init
@@ -18,7 +18,7 @@ Patch1:		%{name}-config.patch
 Patch2:		%{name}-parser_fix.patch
 URL:		http://zipper.paco.net/~igor/oops.eng/
 BuildRequires:	autoconf
-BuildRequires:	db3-devel
+BuildRequires:	db-devel
 BuildRequires:	pam-devel
 PreReq:		rc-scripts
 Requires(post,preun):	/sbin/chkconfig
@@ -69,7 +69,7 @@ ró¿nice w stosunku do Squida:
 %setup -q
 %patch0 -p1
 %patch1 -p1
-%patch2 -p1
+#%patch2 -p1
 
 %build
 %{__autoconf}
@@ -115,7 +115,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc ChangeLog FAQ INSTALL README SERVICES TODO doc/*.html contrib/*
+%doc ChangeLog FAQ INSTALL README SERVICES TODO doc/*.html contrib
 %dir %{_sysconfdir}/oops
 %attr(644,root,daemon) %config(noreplace) %{_sysconfdir}/oops/*
 %attr(754,root,root) /etc/rc.d/init.d/oops
