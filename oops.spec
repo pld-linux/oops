@@ -5,7 +5,7 @@ Summary:	Oops! is an HTTP-1.1/FTP proxy server
 Summary(pl):	Oops! jest serwerem proxy HTTP-1.1/FTP
 Name:		oops
 Version:	1.5.22
-Release:	0.6
+Release:	0.7
 License:	GPL v2
 Group:		Networking/Daemons
 Source0:	http://zipper.paco.net/~igor/oops/%{name}-%{version}.tar.gz
@@ -41,6 +41,27 @@ from Squid:
   /reconfiguration. Thus, for example, the reconfiguration on the fly
   doesn't result in a breakaway of already established connections.
 
+%description -l pl
+Oops! jest serwerem proxy; g³ówne cele przy¶wiecaj±ce jego tworzeniu
+to stabilna praca, szybko¶æ, obs³uga podstawowych protoko³ów,
+modularno¶æ, ³atwo¶æ u¿ycia. Po co jeszcze jeden serwer, skoro ju¿
+jest Squid? Autor Oopsa nie by³ usatysfakcjonowany Squidem w
+niektórych punktach, dlatego napisa³ w³asny program. Podstawowe
+ró¿nice w stosunku do Squida:
+- Ka¿de ¿±danie jest obs³ugiwane przez oddzielny w±tek, co pozwala na
+  wykorzystanie wszystkich dostêpnych procesorów w maszynach
+  wieloprocesorowych.
+- Buforowane dokumenty s± przechowywane w jednym lub kilku du¿ych
+  plikach; umo¿liwia to unikniêcie obci±¿enia systemu przy operacjach
+  na katalogach i przyspieszenie dostêpu do dokumentów, oraz na
+  u¿ywanie surowych urz±dzeñ do przechowywania buforowanych obiektów.
+- Modularna struktura programu udostêpnia rozszerzanie funkcjonalno¶ci
+  bez potrzeby zmian w kodzie ¼ród³owym.
+- Szczególn± uwagê zwrócono na zapewnienie stabilnej, ci±g³ej, nie
+  przerwanej pracy oraz ³atw± i prost± konfiguracjê/rekonfiguracjê.
+  Na przyk³ad rekonfiguracja w locie nie powoduje zerwania ju¿
+  ustanowionych po³±czeñ.
+
 %prep
 %setup -q
 %patch0 -p1
@@ -48,7 +69,7 @@ from Squid:
 %patch2 -p1
 
 %build
-autoconf
+%{__autoconf}
 autoheader
 %configure \
 	--enable-oops-user=daemon \
@@ -92,14 +113,15 @@ fi
 %files
 %defattr(644,root,root,755)
 %doc ChangeLog FAQ INSTALL README SERVICES TODO doc/*.html contrib/*
-%dir %{_sysconfdir}
+%dir %{_sysconfdir}/oops
+# is write permission to configuration files really needed???
 %attr(644,daemon,daemon) %config(noreplace) %{_sysconfdir}/oops/*
-%attr(755,root,root) %{_sysconfdir}/rc.d/init.d/oops
-%attr(755,root,root) %config(noreplace) %{_sysconfdir}/sysconfig/oops
-%attr(755,root,root) %config(noreplace) %{_sysconfdir}/logrotate.d/oops
+%attr(754,root,root) %{_sysconfdir}/rc.d/init.d/oops
+%attr(640,root,root) %config(noreplace) %{_sysconfdir}/sysconfig/oops
+%attr(640,root,root) %config(noreplace) %{_sysconfdir}/logrotate.d/oops
 %attr(755,root,root) %{_sbindir}/*
 %attr(755,root,root) %{_libdir}/oops/*
-%dir %attr(755,root,root)	%{_libdir}/oops/
-%dir %attr(755,daemon,daemon)	/var/log/oops
-%dir %attr(755,daemon,daemon)	/var/spool/oops
+%dir %{_libdir}/oops
+%dir %attr(755,daemon,daemon) /var/log/oops
+%dir %attr(755,daemon,daemon) /var/spool/oops
 %{_mandir}/man8/*
