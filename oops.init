@@ -33,6 +33,7 @@ fi
 # Sanity check
 [ -f /etc/oops/oops.cfg ] || exit 0
 
+
 # See how we were called.
 case "$1" in
   start)
@@ -73,7 +74,7 @@ case "$1" in
 		msg_not_running 'Oops!'
 		exit 1
 	fi
-  	;;
+	;;
   status)
 	status oops
 	/usr/sbin/oopsctl chkconfig
