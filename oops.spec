@@ -12,10 +12,14 @@ Source2:	%{name}.sysconfig
 Source3:	%{name}.init
 Patch0:		%{name}-DESTDIR.patch
 Patch1:		%{name}-config.patch
+Patch2:		%{name}-ac.patch
 URL:		http://zipper.paco.net/~igor/oops.eng/
 BuildRequires:	autoconf
 BuildRequires:	db-devel
+BuildRequires:	pcre-devel
 BuildRequires:	pam-devel
+BuildRequires:	mysql-devel
+BuildRequires:	postgresql-devel
 PreReq:		rc-scripts
 Requires(post,preun):	/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -65,13 +69,21 @@ ró¿nice w stosunku do Squida:
 %setup -q
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 %{__autoconf}
 %{__autoheader}
+CFLAGS="-D_XOPEN_SOURCE=600"
 %configure \
+	--enable-large-files \
 	--enable-oops-user=daemon \
-	--libdir=/usr/lib/oops \
+	--with-regexp=pcre \
+	--with-zlib=%{_prefix} \
+	--with-DB=%{_prefix} \
+	--with-MYSQL=%{_prefix} \
+	--with-PGSQL=%{_prefix} \
+	--libdir=%{_libdir}/oops \
 	--sysconfdir=%{_sysconfdir}/oops
 
 %{__make}
