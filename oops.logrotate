@@ -1,0 +1,10 @@
+/var/log/oops/* {
+	olddir /var/log/archiv/oops
+	weekly
+	rotate 4
+	compress
+	create 660 daemon daemon
+	postrotate
+		/usr/sbin/oopsctl rotate
+	endscript
+}
