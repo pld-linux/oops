@@ -21,9 +21,13 @@
 [ -f /etc/sysconfig/oops ] && . /etc/sysconfig/oops
 
 # Check that networking is up.
-if is_no "${NETWORKING}"; then
-	msg_network_down Oops!
-	exit 1
+if is_yes "${NETWORKING}"; then
+	if [ ! -f /var/lock/subsys/network ]; then
+		msg_network_down 'Oops!'
+		exit 1
+	fi
+else
+	exit 0
 fi
 
 # Sanity check
@@ -34,23 +38,24 @@ case "$1" in
   start)
 	# Check if the service is already running?
 	if [ ! -f /var/lock/subsys/oops ]; then
-		msg_starting Oops!
+		msg_starting 'Oops!'
 		busy		
 		daemon $SERVICE_RUN_NICE_LEVEL oops -d -c /etc/oops/oops.cfg $OOPS_OPTS
 		RETVAL=$?
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/oops
 	else
-		msg_already_running Oops!
+		msg_already_running 'Oops!'
+		exit 1
 	fi
 	;;
   stop)
 	# Stop daemons.
 	if [ -f /var/lock/subsys/oops ]; then
-		msg_stopping oops
+		msg_stopping 'Oops!'
 		oopsctl shutdown
 		rm -f /var/lock/subsys/oops >/dev/null 2>&1
 	else
-		msg_not_running oops
+		msg_not_running 'Oops!'
 		exit 1
 	fi
 	;;
@@ -60,12 +65,12 @@ case "$1" in
 	;;
   reload)
 	if [ -f /var/lock/subsys/oops ]; then
-		msg_reloading oops
+		msg_reloading 'Oops!'
 		busy
 		oopsctl reconfigure
 		ok
 	else
-		msg_not_running oops
+		msg_not_running 'Oops!'
 		exit 1
 	fi
   	;;
@@ -76,11 +81,11 @@ case "$1" in
 	exit $?
 	;;
   init)
-	echo "Initializing Oops!"
+	echo $(nls "Initializing Oops")'!'
 	oops -z -c /etc/oops/oops.cfg
 	;;
   *)
-	msg_usage "$0 {start|stop|status|restart|reload|init}"
+	msg_usage "$0 {start|stop|init|restart|reload|status}"
 	exit 1
 esac
 
