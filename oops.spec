@@ -148,7 +148,7 @@ fi
 %defattr(644,root,root,755)
 %doc ChangeLog FAQ INSTALL README SERVICES TODO doc/*.html contrib
 %dir %{_sysconfdir}/oops
-%attr(644,root,daemon) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/oops/[^p]*
+%attr(644,root,daemon) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/oops/[!p]*
 %attr(640,root,daemon) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/oops/passwd
 %attr(754,root,root) /etc/rc.d/init.d/oops
 %attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/oops
