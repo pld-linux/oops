@@ -70,7 +70,7 @@ ró¿nice w stosunku do Squida:
 
 %build
 %{__autoconf}
-autoheader
+%{__autoheader}
 %configure \
 	--enable-oops-user=daemon \
 	--libdir=/usr/lib/oops \
