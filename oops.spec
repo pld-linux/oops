@@ -80,8 +80,8 @@ autoheader
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/etc/{sysconfig,rc.d/init.d,logrotate.d},/var/{log/{archive/oops,oops},spool/oops}}
-install -d $RPM_BUILD_ROOT%{_mandir}/man8
+install -d $RPM_BUILD_ROOT{/etc/{sysconfig,rc.d/init.d,logrotate.d},/var/{log/{archiv/oops,oops},spool/oops}} \
+	$RPM_BUILD_ROOT%{_mandir}/man8
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -122,6 +122,6 @@ fi
 %attr(755,root,root) %{_libdir}/oops/*
 %dir %{_libdir}/oops
 %dir %attr(755,daemon,daemon) /var/log/oops
-%dir /var/log/archive/oops
+%dir /var/log/archiv/oops
 %dir %attr(755,daemon,daemon) /var/spool/oops
 %{_mandir}/man8/*
