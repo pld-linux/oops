@@ -32,7 +32,7 @@
  #  Pidfile. for kill -1 `cat oops.pid` and for locking.
  ##
 -pidfile		@OOPS_LOCALSTATEDIR@/oops.pid
-+pidfile		@OOPS_LOCALSTATEDIR@/run/oops.pid
++pidfile		@OOPS_LOCALSTATEDIR@/run/oops/oops.pid
  
  ##
  # Statistics file - once per minute flush some statistics to this file
@@ -78,3 +78,14 @@
  #	dbname	gdburl
  #
  #    ##
+--- ./src/oops.cfg.in~	2005-01-02 16:22:38.000000000 +0200
++++ ./src/oops.cfg.in	2005-01-02 16:23:09.000000000 +0200
+@@ -600,7 +600,7 @@
+ 
+ module oopsctl {
+ 	# path to oopsctl unix socket
+-	socket_path	@OOPS_LOCALSTATEDIR@/oopsctl
++	socket_path	@OOPS_LOCALSTATEDIR@/run/oops/oopsctl
+ 	# time to auto-refresh page (seconds)
+         html_refresh    300
+ }
