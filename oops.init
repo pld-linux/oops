@@ -33,7 +33,7 @@ fi
 # Sanity check
 [ -f /etc/oops/oops.cfg ] || exit 0
 
-
+RETVAL=0
 # See how we were called.
 case "$1" in
   start)
@@ -46,7 +46,6 @@ case "$1" in
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/oops
 	else
 		msg_already_running 'Oops!'
-		exit 1
 	fi
 	;;
   stop)
@@ -57,30 +56,30 @@ case "$1" in
 		rm -f /var/lock/subsys/oops >/dev/null 2>&1
 	else
 		msg_not_running 'Oops!'
-		exit 1
 	fi
 	;;
   restart)
 	$0 stop
 	$0 start
+	exit $?
 	;;
   reload|force-reload)
 	if [ -f /var/lock/subsys/oops ]; then
 		msg_reloading 'Oops!'
 		busy
 		oopsctl reconfigure
-		RETVAL=$?
+		[ $? -ne 0 ] && RETVAL=7
 		[ $RETVAL -eq 0 ] && ok || fail
 	else
-		msg_not_running 'Oops!'
-		exit 1
+		msg_not_running 'Oops!' >&2
+		exit 7
 	fi
 	;;
   status)
 	status oops
+	RETVAL=$?
 	/usr/sbin/oopsctl chkconfig
 	/usr/sbin/oopsctl stat
-	exit $?
 	;;
   init)
 	nls "Initializing %s" 'Oops!'
@@ -88,7 +87,7 @@ case "$1" in
 	;;
   *)
 	msg_usage "$0 {start|stop|init|restart|reload|force-reload|status}"
-	exit 1
+	exit 3
 esac
 
 exit $RETVAL
