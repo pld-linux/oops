@@ -1,0 +1,89 @@
+--- ./src/oops.cfg.in.org1	Mon Jul  8 17:42:17 2002
++++ ./src/oops.cfg.in	Mon Jul  8 22:06:55 2002
+@@ -2,8 +2,8 @@
+ #  nameservers. Use your own, not our.
+ ## 
+ 
+-nameserver 195.114.128.50
+-nameserver 193.219.193.130
++#nameserver 195.114.128.50
++#nameserver 193.219.193.130
+ 
+ ##
+ #  Ports and address to use for HTTP and ICP
+@@ -32,24 +32,24 @@
+ #  When used in form 'filename [{N S}] [[un]buffered]'
+ #  will be rotated automatically (up to N files up to S bytes in size)
+ ##
+-logfile		/dev/tty
+-#logfile	@OOPS_HOME@/logs/oops.log { 3 1m } unbuffered
++#logfile		/dev/tty
++logfile	@OOPS_LOCALSTATEDIR@/log/oops/oops.log { 3 1m } unbuffered
+ 
+ ##
+ #  Accesslog - the same as for squid. Re rotating - see note for logfile
+ ##
+-accesslog	/dev/tty
+-#accesslog	@OOPS_HOME@/logs/access.log
++#accesslog	/dev/tty
++accesslog	@OOPS_LOCALSTATEDIR@/log/oops/access.log
+ 
+ ##
+ #  Pidfile. for kill -1 `cat oops.pid` and for locking.
+ ##
+-pidfile		@OOPS_LOCALSTATEDIR@/oops.pid
++pidfile		@OOPS_LOCALSTATEDIR@/run/oops.pid
+ 
+ ##
+ # Statistics file - once per minute flush some statistics to this file
+ ##
+-statistics	@OOPS_LOCALSTATEDIR@/oops_statfile
++statistics	@OOPS_LOCALSTATEDIR@/log/oops/oops_statfile
+ 
+ ##
+ #  icons - where to find link.gif, dir.gif, binary.gif and so on (for 
+@@ -415,7 +415,7 @@
+ ##
+ 
+ storage {
+-	path @OOPS_HOME@/storages/oops_storage ;
++	path @OOPS_LOCALSTATEDIR@/spool/oops/oops_storage ;
+ #	Size of the storage. Can be in bytes or 'auto'. Auto is
+ #	usefull for pre-created storages or disk slices.
+ #	NOTE: 'size auto' won't work for Linux on disk slices.
+@@ -432,7 +432,7 @@
+ }
+ 
+ #storage {
+-#	path @OOPS_HOME@/storages/oops_storage1 ;
++#	path @OOPS_LOCALSTATEDIR@/spool/oops/oops_storage1 ;
+ #	size 600m ;
+ #}
+ 
+@@ -563,7 +563,7 @@
+ 
+ module oopsctl {
+ 	# path to oopsctl unix socket
+-	socket_path	@OOPS_LOCALSTATEDIR@/oopsctl
++	socket_path	@OOPS_LOCALSTATEDIR@/tmp/oopsctl
+ 	# time to auto-refresh page (seconds)
+         html_refresh    300
+ }
+@@ -667,7 +667,7 @@
+     #  dbname - filename for index file. Use just filename (no full path)
+     ##
+ 
+-	dbhome	@OOPS_HOME@/DB
++	dbhome	@OOPS_LOCALSTATEDIR@/spool/oops/DB
+ 	dbname	dburl
+ 
+     ##
+@@ -695,7 +695,7 @@
+ #    #  dbname - filename for index file. Use just filename (no full path)
+ #    ##
+ #
+-#	dbhome	@OOPS_HOME@/DB
++#	dbhome	@OOPS_LOCALSTATEDIR@/spool/oops/DB
+ #	dbname	gdburl
+ #
+ #    ##
