@@ -64,12 +64,13 @@ case "$1" in
 	$0 stop
 	$0 start
 	;;
-  reload)
+  reload|force-reload)
 	if [ -f /var/lock/subsys/oops ]; then
 		msg_reloading 'Oops!'
 		busy
 		oopsctl reconfigure
-		ok
+		RETVAL=$?
+		[ $RETVAL -eq 0 ] && ok || fail
 	else
 		msg_not_running 'Oops!'
 		exit 1
@@ -82,11 +83,11 @@ case "$1" in
 	exit $?
 	;;
   init)
-	echo $(nls "Initializing Oops")'!'
+	nls "Initializing %s" 'Oops!'
 	oops -z -c /etc/oops/oops.cfg
 	;;
   *)
-	msg_usage "$0 {start|stop|init|restart|reload|status}"
+	msg_usage "$0 {start|stop|init|restart|reload|force-reload|status}"
 	exit 1
 esac
 
