@@ -73,7 +73,7 @@ case "$1" in
 	if [ -f /var/lock/subsys/oops ]; then
 		msg_reloading 'Oops!'
 		busy
-		oopsctl reconfigure
+		oopsctl reconfigure > /dev/null 2>&1
 		[ $? -ne 0 ] && RETVAL=7
 		[ $RETVAL -eq 0 ] && ok || fail
 	else
