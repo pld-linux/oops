@@ -87,8 +87,8 @@ install -d $RPM_BUILD_ROOT{/etc/{sysconfig,rc.d/init.d,logrotate.d},/var/{log/{a
 	DESTDIR=$RPM_BUILD_ROOT
 
 install %{SOURCE1}	$RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d/oops
-install %{SOURCE2}	$RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/oops
-install %{SOURCE3}	$RPM_BUILD_ROOT%{_sysconfdir}/rc.d/init.d/oops
+install %{SOURCE2}	$RPM_BUILD_ROOT/etc/sysconfig/oops
+install %{SOURCE3}	$RPM_BUILD_ROOT/etc/rc.d/init.d/oops
 install doc/*.8		$RPM_BUILD_ROOT%{_mandir}/man8/
 
 %clean
@@ -115,8 +115,8 @@ fi
 %doc ChangeLog FAQ INSTALL README SERVICES TODO doc/*.html contrib/*
 %dir %{_sysconfdir}/oops
 %attr(644,root,daemon) %config(noreplace) %{_sysconfdir}/oops/*
-%attr(754,root,root) %{_sysconfdir}/rc.d/init.d/oops
-%attr(640,root,root) %config(noreplace) %{_sysconfdir}/sysconfig/oops
+%attr(754,root,root) /etc/rc.d/init.d/oops
+%attr(640,root,root) %config(noreplace) /etc/sysconfig/oops
 %attr(640,root,root) %config(noreplace) %{_sysconfdir}/logrotate.d/oops
 %attr(755,root,root) %{_sbindir}/*
 %attr(755,root,root) %{_libdir}/oops/*
