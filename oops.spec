@@ -1,5 +1,6 @@
 # TODO
 # - create separate user for this daemon?
+# - SECURITY: http://www.gentoo.org/security/en/glsa/glsa-200505-02.xml
 Summary:	Oops! is an HTTP-1.1/FTP proxy server
 Summary(pl):	Oops! jest serwerem proxy HTTP-1.1/FTP
 Name:		oops
