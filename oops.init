@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# oops		This shell script takes care of starting and stopping
+# oops		This shell script takes care of starting and stopping \
 #		Oops!
 #
 # chkconfig:	345 90 25
