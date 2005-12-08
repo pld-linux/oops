@@ -40,7 +40,7 @@ case "$1" in
 	# Check if the service is already running?
 	if [ ! -f /var/lock/subsys/oops ]; then
 		msg_starting 'Oops!'
-		busy		
+		busy
 		oops_out=$(oops -C /etc/oops/oops.cfg 2>&1)
 		if [ $? -eq 0 ]; then
 		    daemon $SERVICE_RUN_NICE_LEVEL oops -d -c /etc/oops/oops.cfg $OOPS_OPTS
