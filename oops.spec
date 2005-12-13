@@ -22,14 +22,14 @@ URL:		http://zipper.paco.net/~igor/oops.eng/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	db-devel
-BuildRequires:	pcre-devel
-BuildRequires:	pam-devel
 BuildRequires:	mysql-devel
+BuildRequires:	pam-devel
+BuildRequires:	pcre-devel
 BuildRequires:	postgresql-devel
-BuildRequires:	sed >= 4.0
 BuildRequires:	rpmbuild(macros) >= 1.177
-PreReq:		rc-scripts
+BuildRequires:	sed >= 4.0
 Requires(post,preun):	/sbin/chkconfig
+Requires:	rc-scripts
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -63,14 +63,14 @@ ró¿nice w stosunku do Squida:
   wykorzystanie wszystkich dostêpnych procesorów w maszynach
   wieloprocesorowych.
 - Buforowane dokumenty s± przechowywane w jednym lub kilku du¿ych
-  plikach; umo¿liwia to unikniêcie obci±¿enia systemu przy operacjach
-  na katalogach i przyspieszenie dostêpu do dokumentów, oraz na
-  u¿ywanie surowych urz±dzeñ do przechowywania buforowanych obiektów.
+  plikach; umo¿liwia to unikniêcie obci±¿enia systemu przy operacjach na
+  katalogach i przyspieszenie dostêpu do dokumentów, oraz na u¿ywanie
+  surowych urz±dzeñ do przechowywania buforowanych obiektów.
 - Modularna struktura programu udostêpnia rozszerzanie funkcjonalno¶ci
   bez potrzeby zmian w kodzie ¼ród³owym.
 - Szczególn± uwagê zwrócono na zapewnienie stabilnej, ci±g³ej, nie
-  przerwanej pracy oraz ³atw± i prost± konfiguracjê/rekonfiguracjê.
-  Na przyk³ad rekonfiguracja w locie nie powoduje zerwania ju¿
+  przerwanej pracy oraz ³atw± i prost± konfiguracjê/rekonfiguracjê. Na
+  przyk³ad rekonfiguracja w locie nie powoduje zerwania ju¿
   ustanowionych po³±czeñ.
 
 %prep
@@ -149,11 +149,11 @@ fi
 %defattr(644,root,root,755)
 %doc ChangeLog FAQ INSTALL README SERVICES TODO doc/*.html contrib
 %dir %{_sysconfdir}/oops
-%attr(644,root,daemon) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/oops/[!p]*
-%attr(640,root,daemon) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/oops/passwd
+%attr(644,root,daemon) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/oops/[!p]*
+%attr(640,root,daemon) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/oops/passwd
 %attr(754,root,root) /etc/rc.d/init.d/oops
-%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/oops
-%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/logrotate.d/oops
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/oops
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/logrotate.d/oops
 %attr(755,root,root) %{_sbindir}/*
 %dir %{_libdir}/oops
 %attr(755,root,root) %{_libdir}/oops/*
