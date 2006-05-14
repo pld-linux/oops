@@ -1,11 +1,10 @@
 # TODO
 # - create separate user for this daemon?
-# - SECURITY: http://www.gentoo.org/security/en/glsa/glsa-200505-02.xml
 Summary:	Oops! is an HTTP-1.1/FTP proxy server
 Summary(pl):	Oops! jest serwerem proxy HTTP-1.1/FTP
 Name:		oops
 Version:	1.5.23
-Release:	0.12
+Release:	0.13
 License:	GPL v2
 Group:		Networking/Daemons
 Source0:	http://zipper.paco.net/~igor/oops/%{name}-%{version}.tar.gz
@@ -18,6 +17,7 @@ Patch1:		%{name}-config.patch
 Patch2:		%{name}-ac.patch
 Patch3:		%{name}-build.patch
 Patch4:		%{name}-socket.patch
+Patch5:		%{name}-CVE-2005-1121.patch
 URL:		http://zipper.paco.net/~igor/oops.eng/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -80,6 +80,7 @@ ró¿nice w stosunku do Squida:
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 %build
 cp -f /usr/share/automake/config.sub .
