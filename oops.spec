@@ -21,7 +21,9 @@ Patch5:		%{name}-CVE-2005-1121.patch
 URL:		http://zipper.paco.net/~igor/oops.eng/
 BuildRequires:	autoconf
 BuildRequires:	automake
+BuildRequires:	bison
 BuildRequires:	db-devel
+BuildRequires:	flex
 BuildRequires:	mysql-devel
 BuildRequires:	pam-devel
 BuildRequires:	pcre-devel
