@@ -1,7 +1,7 @@
 # TODO
 # - create separate user for this daemon?
 Summary:	Oops! is an HTTP-1.1/FTP proxy server
-Summary(pl):	Oops! jest serwerem proxy HTTP-1.1/FTP
+Summary(pl.UTF-8):   Oops! jest serwerem proxy HTTP-1.1/FTP
 Name:		oops
 Version:	1.5.23
 Release:	0.13
@@ -54,26 +54,26 @@ from Squid:
   /reconfiguration. Thus, for example, the reconfiguration on the fly
   doesn't result in a breakaway of already established connections.
 
-%description -l pl
-Oops! jest serwerem proxy; g³ówne cele przy¶wiecaj±ce jego tworzeniu
-to stabilna praca, szybko¶æ, obs³uga podstawowych protoko³ów,
-modularno¶æ, ³atwo¶æ u¿ycia. Po co jeszcze jeden serwer, skoro ju¿
-jest Squid? Autor Oopsa nie by³ usatysfakcjonowany Squidem w
-niektórych punktach, dlatego napisa³ w³asny program. Podstawowe
-ró¿nice w stosunku do Squida:
-- Ka¿de ¿±danie jest obs³ugiwane przez oddzielny w±tek, co pozwala na
-  wykorzystanie wszystkich dostêpnych procesorów w maszynach
+%description -l pl.UTF-8
+Oops! jest serwerem proxy; gÅ‚Ã³wne cele przyÅ›wiecajÄ…ce jego tworzeniu
+to stabilna praca, szybkoÅ›Ä‡, obsÅ‚uga podstawowych protokoÅ‚Ã³w,
+modularnoÅ›Ä‡, Å‚atwoÅ›Ä‡ uÅ¼ycia. Po co jeszcze jeden serwer, skoro juÅ¼
+jest Squid? Autor Oopsa nie byÅ‚ usatysfakcjonowany Squidem w
+niektÃ³rych punktach, dlatego napisaÅ‚ wÅ‚asny program. Podstawowe
+rÃ³Å¼nice w stosunku do Squida:
+- KaÅ¼de Å¼Ä…danie jest obsÅ‚ugiwane przez oddzielny wÄ…tek, co pozwala na
+  wykorzystanie wszystkich dostÄ™pnych procesorÃ³w w maszynach
   wieloprocesorowych.
-- Buforowane dokumenty s± przechowywane w jednym lub kilku du¿ych
-  plikach; umo¿liwia to unikniêcie obci±¿enia systemu przy operacjach na
-  katalogach i przyspieszenie dostêpu do dokumentów, oraz na u¿ywanie
-  surowych urz±dzeñ do przechowywania buforowanych obiektów.
-- Modularna struktura programu udostêpnia rozszerzanie funkcjonalno¶ci
-  bez potrzeby zmian w kodzie ¼ród³owym.
-- Szczególn± uwagê zwrócono na zapewnienie stabilnej, ci±g³ej, nie
-  przerwanej pracy oraz ³atw± i prost± konfiguracjê/rekonfiguracjê. Na
-  przyk³ad rekonfiguracja w locie nie powoduje zerwania ju¿
-  ustanowionych po³±czeñ.
+- Buforowane dokumenty sÄ… przechowywane w jednym lub kilku duÅ¼ych
+  plikach; umoÅ¼liwia to unikniÄ™cie obciÄ…Å¼enia systemu przy operacjach na
+  katalogach i przyspieszenie dostÄ™pu do dokumentÃ³w, oraz na uÅ¼ywanie
+  surowych urzÄ…dzeÅ„ do przechowywania buforowanych obiektÃ³w.
+- Modularna struktura programu udostÄ™pnia rozszerzanie funkcjonalnoÅ›ci
+  bez potrzeby zmian w kodzie ÅºrÃ³dÅ‚owym.
+- SzczegÃ³lnÄ… uwagÄ™ zwrÃ³cono na zapewnienie stabilnej, ciÄ…gÅ‚ej, nie
+  przerwanej pracy oraz Å‚atwÄ… i prostÄ… konfiguracjÄ™/rekonfiguracjÄ™. Na
+  przykÅ‚ad rekonfiguracja w locie nie powoduje zerwania juÅ¼
+  ustanowionych poÅ‚Ä…czeÅ„.
 
 %prep
 %setup -q
