@@ -1,7 +1,7 @@
 # TODO
 # - create separate user for this daemon?
 Summary:	Oops! is an HTTP-1.1/FTP proxy server
-Summary(pl.UTF-8):   Oops! jest serwerem proxy HTTP-1.1/FTP
+Summary(pl.UTF-8):	Oops! jest serwerem proxy HTTP-1.1/FTP
 Name:		oops
 Version:	1.5.23
 Release:	0.13
