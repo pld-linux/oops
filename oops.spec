@@ -105,7 +105,7 @@ CFLAGS="-D_XOPEN_SOURCE=600 -D_GNU_SOURCE=1"
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/etc/{sysconfig,rc.d/init.d,logrotate.d},/var/{run/oops,log/{archiv/oops,oops},spool/oops}} \
+install -d $RPM_BUILD_ROOT{/etc/{sysconfig,rc.d/init.d,logrotate.d},/var/{run/oops,log/{archive/oops,oops},spool/oops}} \
 	$RPM_BUILD_ROOT%{_mandir}/man8
 
 %{__make} install \
