@@ -162,6 +162,6 @@ fi
 %attr(755,root,root) %{_libdir}/oops/*
 %dir %attr(770,root,daemon) /var/run/oops
 %dir %attr(755,daemon,daemon) /var/log/oops
-%dir /var/log/archiv/oops
+%dir /var/log/archive/oops
 %dir %attr(755,daemon,daemon) /var/spool/oops
 %{_mandir}/man8/*
