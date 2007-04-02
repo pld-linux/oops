@@ -1,5 +1,5 @@
 /var/log/oops/* {
-	olddir /var/log/archiv/oops
+	olddir /var/log/archive/oops
 	weekly
 	rotate 4
 	compress
