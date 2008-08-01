@@ -1,10 +1,8 @@
 /var/log/oops/* {
 	olddir /var/log/archive/oops
-	weekly
-	rotate 4
 	compress
 	create 660 daemon daemon
 	postrotate
-		/usr/sbin/oopsctl rotate
+		/usr/sbin/oopsctl rotate >/dev/null
 	endscript
 }
