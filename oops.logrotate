@@ -1,4 +1,5 @@
 /var/log/oops/* {
+	su daemon daemon
 	olddir /var/log/archive/oops
 	compress
 	create 660 daemon daemon
